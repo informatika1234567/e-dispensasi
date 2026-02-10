@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Dispensasi SMAN 1 Magetan</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        '4xl': '2rem',
+                        '5xl': '2.5rem',
+                    },
+                    colors: {
+                        smasa: {
+                            primary: '#1e40af', 
+                            secondary: '#7e22ce',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .ticket-pattern {
+            background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        .logo-clean {
+            mix-blend-mode: multiply;
+            filter: contrast(1.1);
+        }
+
+        .logo-circle-container {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            overflow: hidden; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.15);
+            border: 5px solid white;
+            position: relative;
+        }
+        .logo-circle-container img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+        
+        .card-logo-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+        .card-logo-circle img {
+            max-width: 85%;
+            max-height: 85%;
+            object-fit: contain;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media print {
+            body { background: white !important; }
+            .no-print { display: none !important; }
+            .print-shadow { box-shadow: none !important; border: 1px solid #eee !important; }
+            .logo-clean { mix-blend-mode: normal; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-700 via-indigo-600 to-purple-800 min-h-screen flex items-center justify-center p-4">
+
+    <div class="w-full max-w-5xl flex flex-col md:flex-row gap-8 items-stretch justify-center">
+        
+        <!-- Kolom Kiri: Formulir -->
+        <div class="w-full md:w-1/2 glass-effect rounded-5xl shadow-2xl overflow-hidden transform transition-all duration-300 no-print border border-white/30">
+            <!-- Header -->
+            <div class="bg-white/50 p-10 border-b border-gray-100 flex flex-col items-center text-center">
+                <div class="logo-circle-container mb-6">
+                    <img src="image_f420ae.png" 
+                         onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/7/72/Logo_SMAN_1_Magetan.png';"
+                         alt="Logo SMAN 1 Magetan" 
+                         class="logo-clean hover:scale-110 transition-transform duration-500">
+                </div>
+                <h1 class="text-3xl font-black text-gray-800 tracking-tight">E-Dispensasi</h1>
+                <p class="text-base text-gray-500 font-medium">SMA Negeri 1 Magetan</p>
+            </div>
+
+            <!-- Form Content -->
+            <div class="p-8">
+                <form id="dispensationForm" class="space-y-6">
+                    
+                    <div class="group">
+                        <label class="block text-sm font-bold text-gray-700 mb-2 ml-1">Nama Lengkap Siswa</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500">
+                                <i data-lucide="user" class="h-5 w-5"></i>
+                            </div>
+                            <input type="text" id="nama" name="nama" required 
+                                class="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all shadow-sm" 
+                                placeholder="Masukkan nama lengkap">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="group">
+                            <label class="block text-sm font-bold text-gray-700 mb-2 ml-1">Kelas</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500">
+                                    <i data-lucide="graduation-cap" class="h-5 w-5"></i>
+                                </div>
+                                <select id="kelas" name="kelas" required 
+                                    class="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer shadow-sm">
+                                    <option value="" disabled selected>Pilih Kelas</option>
+                                    <optgroup label="Kelas X">
+                                        <option value="X-1">X-1</option><option value="X-2">X-2</option><option value="X-3">X-3</option>
+                                        <option value="X-4">X-4</option><option value="X-5">X-5</option><option value="X-6">X-6</option>
+                                    </optgroup>
+                                    <optgroup label="Kelas XI">
+                                        <option value="XI-1">XI-1</option><option value="XI-2">XI-2</option><option value="XI-3">XI-3</option>
+                                        <option value="XI-4">XI-4</option><option value="XI-5">XI-5</option>
+                                    </optgroup>
+                                    <optgroup label="Kelas XII">
+                                        <option value="XII-1">XII-1</option><option value="XII-2">XII-2</option><option value="XII-3">XII-3</option>
+                                        <option value="XII-4">XII-4</option><option value="XII-5">XII-5</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="group">
+                            <label class="block text-sm font-bold text-gray-700 mb-2 ml-1">No. WhatsApp</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500">
+                                    <i data-lucide="phone" class="h-5 w-5"></i>
+                                </div>
+                                <input type="number" id="whatsapp" name="whatsapp" required 
+                                    class="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all shadow-sm" 
+                                    placeholder="08xxxxxxxxxx">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="group">
+                        <label class="block text-sm font-bold text-gray-700 mb-2 ml-1">Alasan Dispensasi</label>
+                        <div class="relative">
+                            <div class="absolute top-4 left-4 pointer-events-none text-gray-400 group-focus-within:text-blue-500">
+                                <i data-lucide="file-text" class="h-5 w-5"></i>
+                            </div>
+                            <textarea id="alasan" name="alasan" required rows="3"
+                                class="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none shadow-sm" 
+                                placeholder="Tuliskan alasan detail keperluan izin..."></textarea>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="submitBtn"
+                        class="w-full bg-gradient-to-r from-blue-700 to-indigo-800 text-white font-black py-5 rounded-2xl shadow-xl hover:shadow-blue-500/30 transform hover:-translate-y-1 transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed">
+                        <span id="btnText" class="text-xl uppercase tracking-wide">Terbitkan Izin</span>
+                        <div id="btnLoader" class="hidden spinner"></div>
+                        <i id="btnIcon" data-lucide="shield-check" class="h-6 w-6"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Kolom Kanan: Pratinjau Kartu -->
+        <div id="ticketContainer" class="w-full md:w-1/2 flex items-center justify-center">
+            <!-- State Kosong -->
+            <div id="emptyState" class="glass-effect rounded-5xl p-12 flex flex-col items-center justify-center text-center w-full h-full min-h-[500px] border-2 border-dashed border-white/40">
+                <div class="bg-blue-900/20 p-8 rounded-full mb-6">
+                    <i data-lucide="ticket" class="h-20 w-20 text-white opacity-90 animate-pulse"></i>
+                </div>
+                <h3 class="text-3xl font-black text-white mb-3 tracking-tight">Kartu Izin Digital</h3>
+                <p class="text-blue-100 text-lg max-w-xs leading-relaxed opacity-80">Masukkan data Anda untuk membuat kartu izin resmi SMA Negeri 1 Magetan.</p>
+            </div>
+
+            <!-- Result Card -->
+            <div id="resultCard" class="hidden w-full animate-in fade-in zoom-in duration-500">
+                <div class="bg-white rounded-5xl overflow-hidden shadow-2xl border border-gray-100 print-shadow">
+                    <!-- Header Kartu -->
+                    <div class="bg-gradient-to-br from-blue-800 to-indigo-900 p-8 text-white relative">
+                        <div class="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-white/10 blur-3xl"></div>
+                        <div class="flex items-center gap-6 relative z-10">
+                            <div class="card-logo-circle">
+                                <img src="image_f420ae.png" class="logo-clean">
+                            </div>
+                            <div>
+                                <h2 class="font-black text-2xl leading-none tracking-tight uppercase">Izin Dispensasi</h2>
+                                <p class="text-xs text-blue-300 font-bold tracking-[0.25em] mt-2">SMAN 1 MAGETAN</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Konten Kartu -->
+                    <div class="p-8 ticket-pattern">
+                        <div class="space-y-6">
+                            <div class="flex justify-between items-end border-b-2 border-gray-50 pb-5">
+                                <div>
+                                    <p class="text-[11px] text-gray-400 font-black uppercase tracking-widest mb-1">Nomor Registrasi</p>
+                                    <p id="cardId" class="text-base font-mono font-black text-blue-700">#SMASA-XXXXX</p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-[11px] font-black text-green-600 bg-green-50 px-4 py-1.5 rounded-full border border-green-100 uppercase tracking-wider">Terverifikasi</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-50/80 p-6 rounded-4xl border border-gray-100 shadow-sm backdrop-blur-sm">
+                                <p class="text-[11px] text-blue-500 font-black uppercase tracking-widest mb-2">Nama Siswa</p>
+                                <p id="cardName" class="text-2xl font-black text-gray-900 leading-tight mb-1">-</p>
+                                <p id="cardClass" class="text-base font-bold text-gray-500">-</p>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div class="flex items-start gap-4 p-5 bg-orange-50 rounded-3xl border border-orange-100">
+                                    <div class="bg-orange-500 p-2 rounded-xl">
+                                        <i data-lucide="info" class="h-4 w-4 text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-[11px] text-orange-400 font-black uppercase tracking-widest mb-1">Alasan Keluar</p>
+                                        <p id="cardReason" class="text-sm text-gray-800 font-bold italic leading-relaxed">"..."</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-4 p-5 bg-blue-50 rounded-3xl border border-blue-100">
+                                    <div class="bg-blue-600 p-2 rounded-xl">
+                                        <i data-lucide="clock-4" class="h-4 w-4 text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-[11px] text-blue-400 font-black uppercase tracking-widest mb-1">Waktu Diterbitkan</p>
+                                        <p id="cardTime" class="text-sm font-black text-gray-800">-</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer Verifikasi Digital -->
+                        <div class="mt-10 pt-8 border-t-2 border-dashed border-gray-200 flex flex-col items-center">
+                            <div class="w-full h-16 bg-gray-950 rounded-3xl flex items-center justify-center px-8 mb-4 shadow-inner">
+                                <div class="flex gap-[3px] h-full w-full justify-center items-center py-4">
+                                    <!-- Barcode digital visual -->
+                                    <div class="w-1 bg-white/20 h-full"></div><div class="w-3 bg-white/80 h-full"></div>
+                                    <div class="w-1 bg-white/40 h-full"></div><div class="w-4 bg-white/90 h-full"></div>
+                                    <div class="w-2 bg-white/30 h-full"></div><div class="w-1 bg-white/70 h-full"></div>
+                                    <div class="w-5 bg-white/90 h-full"></div><div class="w-2 bg-white/50 h-full"></div>
+                                    <div class="w-4 bg-white/80 h-full"></div><div class="w-1 bg-white/60 h-full"></div>
+                                    <div class="w-3 bg-white/90 h-full"></div><div class="w-2 bg-white/40 h-full"></div>
+                                </div>
+                            </div>
+                            <p class="text-[11px] text-gray-400 font-bold text-center leading-relaxed max-w-xs uppercase tracking-tight">Tunjukkan kartu digital ini kepada Guru Piket atau Petugas Keamanan saat keluar gerbang.</p>
+                        </div>
+                    </div>
+
+                    <!-- Tombol Aksi -->
+                    <div class="p-8 bg-gray-50 flex gap-4 no-print border-t border-gray-100">
+                        <button onclick="window.print()" class="flex-1 flex items-center justify-center gap-3 py-4 bg-white border-2 border-gray-200 rounded-2xl text-sm font-black text-gray-700 hover:bg-gray-100 transition-all shadow-sm">
+                            <i data-lucide="download" class="h-5 w-5"></i> UNDUH PDF
+                        </button>
+                        <button onclick="location.reload()" class="flex-1 flex items-center justify-center gap-3 py-4 bg-blue-800 rounded-2xl text-sm font-black text-white hover:bg-blue-900 transition-all shadow-xl shadow-blue-800/30">
+                            <i data-lucide="refresh-cw" class="h-5 w-5"></i> BARU
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Success/Error -->
+    <div id="statusModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-4xl p-8 max-w-sm w-full text-center shadow-2xl transform transition-all scale-95 opacity-0" id="modalContent">
+            <div id="modalIconContainer" class="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center">
+                <i id="modalIcon" class="h-10 w-10"></i>
+            </div>
+            <h4 id="modalTitle" class="text-2xl font-black text-gray-900 mb-2">Berhasil!</h4>
+            <p id="modalMessage" class="text-gray-500 mb-6">Data dispensasi telah disimpan ke sistem.</p>
+            <button onclick="closeModal()" class="w-full py-4 bg-gray-900 text-white font-bold rounded-2xl hover:bg-black transition-all">Lanjutkan</button>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // GANTI URL INI DENGAN URL DARI GOOGLE APPS SCRIPT ANDA
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwQbAgHCO3OIWAZ6OI1BgXGWplZv2WsRUtQwOTbmpLe1Md8GwqWErJ5K9cb5WvIYD44LQ/exec';
+
+        const form = document.getElementById('dispensationForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const btnLoader = document.getElementById('btnLoader');
+        const btnIcon = document.getElementById('btnIcon');
+
+        const statusModal = document.getElementById('statusModal');
+        const modalContent = document.getElementById('modalContent');
+        const modalIconContainer = document.getElementById('modalIconContainer');
+        const modalIcon = document.getElementById('modalIcon');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // 1. Tampilkan loading
+            submitBtn.disabled = true;
+            btnText.textContent = "Mengirim...";
+            btnLoader.classList.remove('hidden');
+            btnIcon.classList.add('hidden');
+
+            const formData = {
+                nama: document.getElementById('nama').value,
+                kelas: document.getElementById('kelas').value,
+                whatsapp: document.getElementById('whatsapp').value,
+                alasan: document.getElementById('alasan').value
+            };
+
+            try {
+                // 2. Kirim data ke Google Sheets (Opsional: Hapus blok fetch jika hanya ingin simulasi pratinjau)
+                if(scriptURL !== 'MASUKKAN_URL_WEB_APP_SCRIPT_DISINI') {
+                    await fetch(scriptURL, {
+                        method: 'POST',
+                        mode: 'no-cors', // Penting untuk Apps Script
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(formData)
+                    });
+                }
+
+                // 3. Update Pratinjau Kartu
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+                const dateStr = now.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+                const ticketId = 'SMASA-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+
+                document.getElementById('cardName').textContent = formData.nama;
+                document.getElementById('cardClass').textContent = 'Kelas ' + formData.kelas;
+                document.getElementById('cardReason').textContent = formData.alasan;
+                document.getElementById('cardTime').textContent = `${dateStr} | ${timeStr} WIB`;
+                document.getElementById('cardId').textContent = '#' + ticketId;
+
+                document.getElementById('emptyState').classList.add('hidden');
+                document.getElementById('resultCard').classList.remove('hidden');
+
+                // 4. Tampilkan Modal Sukses
+                showModal('success', 'Berhasil Terbit!', 'Data Anda telah tersimpan dan kartu siap diunduh.');
+
+            } catch (error) {
+                console.error('Error!', error.message);
+                showModal('error', 'Terjadi Kesalahan', 'Gagal menghubungkan ke database. Periksa koneksi internet Anda.');
+            } finally {
+                // Reset tombol
+                submitBtn.disabled = false;
+                btnText.textContent = "Terbitkan Izin";
+                btnLoader.classList.add('hidden');
+                btnIcon.classList.remove('hidden');
+
+                if (window.innerWidth < 768) {
+                    document.getElementById('ticketContainer').scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+
+        function showModal(type, title, message) {
+            statusModal.classList.remove('hidden');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+            }, 10);
+
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+
+            if(type === 'success') {
+                modalIconContainer.className = "w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center bg-green-100 text-green-600";
+                modalIcon.setAttribute('data-lucide', 'check-circle');
+            } else {
+                modalIconContainer.className = "w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center bg-red-100 text-red-600";
+                modalIcon.setAttribute('data-lucide', 'alert-circle');
+            }
+            lucide.createIcons();
+        }
+
+        function closeModal() {
+            modalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                statusModal.classList.add('hidden');
+            }, 200);
+        }
+    </script>
+</body>
+</html>
